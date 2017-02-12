@@ -1,0 +1,45 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    {% for post in posts %}
+        <div class="row">
+            <div class="span12">
+                <h2><a href="{% url 'post_detail' pk=post.pk %}" style="text-decoration: none; color: #000">{{ post.title }}</a>
+                {% if post.author_id == user.id %}
+                    <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}">Редактировать</a>
+                {% endif %}</h2>
+                <p>{{ post.text|linebreaksbr }}</p>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom:15px;">
+            <div class="span2"><a href="/post/addlike/{{ post.id }}"><span class="badge badge-info">&hearts; {{ post.likes }} Мне нравится</span></a></div>
+            <div class="span3">{{ post.published_date }}</div>
+            <div class="span7"><p>Автор: {{ post.author }}</p></div>
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="span12">
+        <div class="pagination pagination-centered">
+            <ul>
+                {% if posts.has_previous %}
+                    <li class="arrow"><a href="/page/{{ posts.previous_page_number }}/">&laquo;</a></li>
+                {% else %}
+                    <li class="arrow disabled"><a href="">&laquo;</a></li>
+                {% endif %}
+                {% for page in posts.paginator.page_range %}
+                    {% if page == posts.number %}
+                        <li class="active"><a href="/page/{{ page }}/">{{ page }}</a></li>
+                    {% else %}
+                        <li><a href="/page/{{ page }}/">{{ page }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if posts.has_next %}
+                    <li class="arrow"><a href="/page/{{ posts.next_page_number }}/">&raquo;</a></li>
+                {% else %}
+                    <li class="arrow disabled"><a href="">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+        <div class="post">
+            {{ user.username }}
+            {% if user.email%}
+                <p>fggfg</p>
+                {{ user.email }}
+            {% endif %}
+        </div>
+{% endblock content %}
+
+    user = get_object_or_404(User, id=user_id)
+    profile = get_object_or_404(UserProfile, id=user_id)
+    return render(request, 'blog/user_detail.html', {'user' : user})
+
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    posts = posts.reverse()
+    n=0
+    for post in posts:
+        n=n+1
+        if post_id==post.id:
+            break
+    n=math.ceil(n/5)
